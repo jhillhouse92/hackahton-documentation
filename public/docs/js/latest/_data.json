@@ -1,0 +1,29 @@
+{
+  "index": {
+    "icon": "home",
+    "title": "DC Hackathon Docs",
+    "menuTitle": "Docs Home",
+    "banner": "Welcome to DC Hackathon Documentation. We hope you find our documentation helpful in getting started utilizing the VA Technology Stack."
+  },
+
+  "quickstart": {
+    "icon": "query-builder",
+    "title": "Local Environment"
+  },
+
+  "help": {
+    "icon": "chat",
+    "title": "Example Applications"
+  },
+  
+  "resources": {
+    "icon": "play-circle-fill",
+    "title": "Resources",
+    "banner": "Angular 2 is currently in Alpha Preview. For <a href='https://docs.angularjs.org/guide'>Angular 1.X Resources</a> please visit <a href='https://angularjs.org/'>Angularjs.org</a>."
+  },
+
+  "api": {
+    "icon": "book",
+    "title": "APIs"
+  }
+}

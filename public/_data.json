@@ -1,0 +1,22 @@
+{
+  "index": {
+    "hero": "home",
+    "title": "Join our first Hackathon covering PTSD and TBI utilizing the VA Technology Stack"
+  },
+
+  "features": {
+    "title": "Features & Benefits",
+    "subtitle": "Powerful Features for Developing Apps"
+  },
+
+  "contribute": {
+    "title": "Contribute to Angular",
+    "subtitle": "Help us build the framework of the future!",
+    "autoformat": "true"
+  },
+
+  "download": {
+    "title": "Download Angular",
+    "subtitle": "Setup & Installation"
+  }
+}
