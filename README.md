@@ -1,9 +1,8 @@
-# Angular.io
-Angular.io is currently the preview site for Angular 2. This site also includes links to other helpful angular resources including Angular 1.X, Angular Material, and AngularFire.
+# Hackathon Documentation
+This is a template wrapper for the hackathon documentation.
 
 ## How you can help
-- [File an issue on github](https://github.com/angular/angular.io/issues)
-- [Contribute to Angular.io](https://github.com/angular/angular.js/blob/master/CONTRIBUTING.md)
+- [File an issue on github]
 
 
 ## Development Setup
