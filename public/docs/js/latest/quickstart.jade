@@ -342,7 +342,36 @@ p.
   h2#section-transpile 5. Install Mongo
 
   p.
-    Mongo Installation Instructions Coming Soon!
+    Download MongoDB 3.0.1 from the MongoDB website. The direct link is <a href="http://www.mongodb.org/downloads">
+    Here</a>
+
+  p.
+     Now we are going to add MongoDB to the .bash_profile.
+
+  pre.prettyprint.linenums
+    code.
+      cd ~
+      vi .bash_profile #add the following lines to the end of the file (if using Command+C and Command+V and Vi make sure to press i to insert)
+      
+      ## Mongo
+      alias mongo='/usr/local/mongodb/bin'
+      
+      #Press :wq if using Vi to save
+      
+      source .bash_profile
+      alias mongo #to make sure the change took effect
+      alias mongo='/usr/local/mongodb/bin' # should output  
+
+      cd /usr/local/mongodb/bin 
+      mongo # should connect to the db
+
+      MongoDB shell version: 3.0.1
+      connecting to: test
+      Server has startup warnings: 
+      2015-03-20T15:01:56.898-0400 [initandlisten] 
+      2015-03-20T15:01:56.898-0400 [initandlisten] ** WARNING: soft rlimits too low. 
+      Number of files is 256, should be at least 1000
+      > # Successfully connected.
 
 
 // STEP 6 - Install VA Dependencies ##########################
