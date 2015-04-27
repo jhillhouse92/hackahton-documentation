@@ -19,8 +19,8 @@
   }
 
   .logo-inverse-large {
-    background: url('/resources/images/logos/inverse/shield/shield-large.png') 0px 0px no-repeat;
-    height: 200px;
+    //background: url('/resources/images/logos/inverse/shield/shield-large.png') 0px 0px no-repeat;
+    height: 1px; /* waiting for an appropriate logo or idea of what to put here */
     width: 200px;
 
     @media handheld and (max-width: $phone-breakpoint),

@@ -1,41 +1,64 @@
 .l-main-section
-  h2 Get Help Using Angular
+  h2 Setting up a Veteran Facing App - VA Moms
 
   p.
-    We have an incredible community of developers who are passionate about solving problems.
-    We recommend some of the following methods to get help with Angular.
+    VA Moms is a tool and information source for women Veterans who are pregnant or breastfeeding.  
+    With this mobile app, women Veterans can enter information from their prenatal and postpartum appointments, 
+    write notes about topics they want to remember or share with their health care team, and find links to resources 
+    about pregnancy and breastfeeding.  The VA Moms application in conjunction with MCC Support will enhance the care 
+    coordination and sharing of electronic information between the Veteran, the Maternity Care Coordinator (MCC), 
+    key VA providers, and the Veteran’s non-VA maternity care provider (if desirable). 
 
 
   .l-sub-section
-    h3 Angular Google Group
+    h3 Install VA Moms WAR files:
 
     ol
       li.
-        Search the archive first.
-        It's likely that your question has already been answered.
+        Download the Back-End WAR file here: <a href="/download/mcc-support-resources.war">va-moms-resources.war</a>.
+        After downloading, copy this file into the Tomcat webapps directory:
+      
+      pre.prettyprint
+        code.
+          cd ~/Downloads #cd to whatever directory you downloaded the WAR file to
+          mv va-moms-resources.war $CATALINA_HOME/webapps
+        
       li.
-        To avoid the spam moderation queue,
-        don't include code directly in your email. (See #3)
-      li.
-        Link to a live code example that demonstrates your problem or question,
-        so you'll get an answer faster.
-        <a href="http://plnkr.co/edit/rQvx8CXtmkCKR89jWn8T">Use this template</a>.
-      li.
-        If you get help, help others. Good karma rulez!
+        Download the Front-End WAR file here: <a href="/download/mcc-support.war">va-moms.war</a>.
+        After downloading, copy this file into the Tomcat webapps directory:
+        
+      pre.prettyprint
+        code.
+          cd ~/Downloads #cd to whatever directory you downloaded the WAR file to
+          mv va-moms.war $CATALINA_HOME/webapps
 
-    a(href="https://groups.google.com/forum/#!forum/angular" class="button button-primary" md-button) View the Google Group
-
+.l-main-section
+  h2 Setting up a Provider Facing App - Maternity Care Coordinator
+  
+  p.
+    MCC Support will provide a mechanism for MCCs and VA providers to help track pregnant patients and facilitate care 
+    coordination needs during pregnancy. This application will offer tools for care coordination based on the gestastional age timeline.
+    A VA Maternity Care Coordinator will use this app to keep track of information on Veterans under their care. 
+    They will be able to schedule and be reminded of upcoming calls that need to be made as they track the progress on the maternity.
+    
   .l-sub-section
-    h3 Angular Chat Room
+    h3 Install Maternity Care Coordinator WAR files:
 
-    p Talk in real time with other Angular developers.
-
-    a(href="http://webchat.freenode.net/?channels=angularjs&uio=d4" class="button button-primary" md-button) View the Chat Room
-
-
-  .l-sub-section
-    h3 Report an Issue
-
-    p If you run into an issue or have a feature request, you can create a new issue on our GitHub repository.
-
-    a(href="https://github.com/angular/angular/issues" class="button button-primary" md-button) Report an Issue
+    ol
+      li.
+        Download the Back-End WAR file here: <a href="/download/mcc-support-resources.war">mcc-support-resources.war</a>.
+        After downloading, copy this file into the Tomcat webapps directory:
+      
+      pre.prettyprint
+        code.
+          cd ~/Downloads #cd to whatever directory you downloaded the WAR file to
+          mv mcc-support-resources.war $CATALINA_HOME/webapps
+        
+      li.
+        Download the Front-End WAR file here: <a href="/download/mcc-support.war">mcc-support.war</a>.
+        After downloading, copy this file into the Tomcat webapps directory:
+        
+      pre.prettyprint
+        code.
+          cd ~/Downloads #cd to whatever directory you downloaded the WAR file to
+          mv mcc-support.war $CATALINA_HOME/webapps

@@ -11,10 +11,10 @@
   }
 
   h1 {
-    margin: 0px ($unit * 10) 0px 0px;
+    margin: 0px ($unit * 1) 0px 0px;
     padding: 0px;
     height: 36px;
-    width: 136px;
+    width: 237px;
     float: left;
 
     @media handheld and (max-width: $phone-breakpoint),
@@ -27,13 +27,13 @@
       background: url('/resources/images/logos/standard/logo-nav.png') 0px 8px no-repeat;
       display: block;
       height: 56px;
-      width: 135px;
+      width: 236px;
       overflow: hidden;
       text-indent: -3000px;
 
       @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min-device-pixel-ratio: 2) {
         background: url('/resources/images/logos/standard/logo-nav@2x.png') 0px 8px no-repeat;
-        background-size: 135px 36px;
+        background-size: 236px 36px;
       }
     }
   }

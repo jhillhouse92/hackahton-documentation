@@ -193,3 +193,64 @@
 .l-layer-10 {
   z-index: $layer-10;
 }
+
+
+/*
+ * FLex Layouts
+ */
+
+.diagram{
+  [flex] {
+    padding: 8px;
+    box-shadow: 0px 2px 5px 0 rgba(0,0,0,0.26);
+    opacity: 0.9;
+    background: #fff;
+    height:60px;
+    text-align: center;
+    font-weight: bold;
+    
+    span{
+      display: block;
+      padding-top: 10px;
+    }
+    
+    &.padding-double {
+      padding-top: 14px;
+    }
+    
+    a {
+      text-decoration: none;
+    }
+    
+  }
+  
+  &.spacing {
+    [flex] {
+      :first-child {
+        margin-left:0%;
+      }
+      
+      margin-left: 5%;
+    }
+  }
+  
+  &.green {
+      background: #ceffd0;
+  }
+    
+  &.yellow {
+    background: #ffe391;    
+  }
+    
+  &.purple {
+    background: #cbc6ff;
+  }
+}
+
+[offset="20"] {
+  margin-left: 20%;
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}

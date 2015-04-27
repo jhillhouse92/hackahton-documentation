@@ -4,7 +4,12 @@
 */
 
 var angularIO = angular.module('angularIOApp', ['ngMaterial'])
-.config(function($mdThemingProvider) {
+
+//app Configuration routing
+.config([
+  '$mdThemingProvider',
+function($mdThemingProvider) {
+  
   $mdThemingProvider.theme('default')
     .primaryPalette('blue', {
       'default': '700', // by default use shade 400 from the pink palette for primary intentions
@@ -17,15 +22,320 @@ var angularIO = angular.module('angularIOApp', ['ngMaterial'])
     .accentPalette('purple', {
       'default': '200' // use shade 200 for default, and keep all other shades the same
     });
-});
 
+}]);
+
+
+/*
+ * Menu Factory
+ * 
+ */
+angularIO.factory('menu', [
+  '$location',
+  '$rootScope',
+function($location, $rootScope) {
+
+  var sections = [{
+    name: 'Getting Started',
+    url: '/getting-started',
+    type: 'link'
+  }];
+
+
+  sections.push({
+    name: 'Example Applications',
+    type: 'heading',
+    children: [{
+      name: 'VA Moms',
+      type: 'toggle',
+      pages: [{
+        name: 'Description and Installation',
+        url: '/docs/js/latest/va-moms-description.html',
+        type: 'link'
+      },
+      {
+        name: 'API Reference',
+        url: '/docs/js/latest/va-moms-reference.html',
+        type: 'link'
+      }]
+    },
+    {
+        name: 'Maternity Care Coordinator',
+        type: 'toggle',
+        pages: [
+        {
+            name: 'Description and Installation',
+            url: '/docs/js/latest/mcc-description.html',
+            type: 'link'
+        },
+        {
+            name: 'API Reference',
+            url: '/docs/js/latest/mcc-reference.html',
+            type: 'link'            
+        }]
+    }]
+  });
+
+  
+  sections.push({
+    name: 'API Reference',
+    type: 'heading',
+    children: [
+    {
+      name: 'Layout',
+      type: 'toggle',
+      pages: [{
+        name: 'Container Elements',
+        id: 'layoutContainers',
+        url: '/layout/container'
+      },{
+        name: 'Grid System',
+        id: 'layoutGrid',
+        url: '/layout/grid'
+      },{
+        name: 'Child Alignment',
+        id: 'layoutAlign',
+        url: '/layout/alignment'
+      },{
+        name: 'Options',
+        id: 'layoutOptions',
+        url: '/layout/options'
+      }]
+    }]
+  });
+
+  function sortByName(a,b) {
+    return a.name < b.name ? -1 : 1;
+  }
+
+  var self;
+
+  $rootScope.$on('$locationChangeSuccess', onLocationChange);
+
+  return self = {
+    sections: sections,
+
+    selectSection: function(section) {
+      self.openedSection = section;
+    },
+    toggleSelectSection: function(section) {
+      self.openedSection = (self.openedSection === section ? null : section);
+    },
+    isSectionSelected: function(section) {
+      return self.openedSection === section;
+    },
+
+    selectPage: function(section, page) {
+      page && page.url && $location.path(page.url);
+      self.currentSection = section;
+      self.currentPage = page;
+    },
+    isPageSelected: function(page) {
+      return self.currentPage === page;
+    }
+  };
+
+  function sortByHumanName(a,b) {
+    return (a.humanName < b.humanName) ? -1 :
+      (a.humanName > b.humanName) ? 1 : 0;
+  }
+
+  function onLocationChange() {
+    var path = $location.path();
+
+    var matchPage = function(section, page) {
+      if (path === page.url) {
+        self.selectSection(section);
+        self.selectPage(section, page);
+      }
+    };
+
+    sections.forEach(function(section) {
+      if(section.children) {
+        // matches nested section toggles, such as API or Customization
+        section.children.forEach(function(childSection){
+          if(childSection.pages){
+            childSection.pages.forEach(function(page){
+              matchPage(childSection, page);
+            });
+          }
+        });
+      }
+      else if(section.pages) {
+        // matches top-level section toggles, such as Demos
+        section.pages.forEach(function(page) {
+          matchPage(section, page);
+        });
+      }
+      else if (section.type === 'link') {
+        // matches top-level links, such as "Getting Started"
+        matchPage(section, section);
+      }
+    });
+  }
+}])
+
+.directive('menuLink', function() {
+  return {
+    scope: {
+      section: '='
+    },
+    templateUrl: '/docs/templates/menu-link.html',
+    link: function($scope, $element) {
+      var controller = $element.parent().controller();
+
+      $scope.isSelected = function() {
+        return controller.isSelected($scope.section);
+      };
+
+      $scope.focusSection = function() {
+        // set flag to be used later when
+        // $locationChangeSuccess calls openPage()
+        controller.autoFocusContent = true;
+      };
+    }
+  };
+})
+
+.directive('menuToggle', function() {
+  return {
+    scope: {
+      section: '='
+    },
+    templateUrl: '/docs/templates/menu-toggle.html',
+    link: function($scope, $element) {
+      var controller = $element.parent().controller();
+
+      $scope.isOpen = function() {
+        return controller.isOpen($scope.section);
+      };
+      $scope.toggle = function() {
+        controller.toggleOpen($scope.section);
+      };
+
+      var parentNode = $element[0].parentNode.parentNode.parentNode;
+      if(parentNode.classList.contains('parent-list-item')) {
+        var heading = parentNode.querySelector('h2');
+        $element[0].firstChild.setAttribute('aria-describedby', heading.id);
+      }
+    }
+  };
+})
+
+.filter('humanizeDoc', function() {
+  return function(doc) {
+    if (!doc) return;
+    if (doc.type === 'directive') {
+      return doc.name.replace(/([A-Z])/g, function($1) {
+        return '-'+$1.toLowerCase();
+      });
+    }
+    return doc.label || doc.name;
+  };
+})
+.filter('nospace', function () {
+  return function (value) {
+    return (!value) ? '' : value.replace(/ /g, '');
+  };
+});
 
 /*
 * Apllication Controller
 *
 */
 
-angularIO.controller('AppCtrl', ['$scope', '$mdDialog', function($scope, $mdDialog){
+angularIO.controller('AppCtrl', ['$scope', '$mdDialog', '$mdMedia', 'menu', '$location', '$rootScope', '$timeout', '$mdSidenav',
+    function($scope, $mdDialog, $mdMedia, menu, $location, $rootScope, $timeout, $mdSidenav){
+    
+    var self = this;
+
+  $rootScope.$mdMedia = $mdMedia;
+  $scope.menu = menu;
+  $scope.path = path;
+  $scope.goHome = goHome;
+  $scope.openMenu = openMenu;
+  $scope.closeMenu = closeMenu;
+  $scope.isSectionSelected = isSectionSelected;
+
+  $rootScope.$on('$locationChangeSuccess', openPage);
+  $scope.focusMainContent = focusMainContent;
+
+  // Methods used by menuLink and menuToggle directives
+  this.isOpen = isOpen;
+  this.isSelected = isSelected;
+  this.toggleOpen = toggleOpen;
+  this.autoFocusContent = false;
+
+
+  var mainContentArea = document.querySelector("[role='main']");
+
+  // *********************
+  // Internal methods
+  // *********************
+
+  function closeMenu() {
+    $timeout(function() { $mdSidenav('left').close(); });
+  }
+
+  function openMenu() {
+    $timeout(function() { $mdSidenav('left').open(); });
+  }
+
+  function path() {
+    return $location.path();
+  }
+
+  function goHome($event) {
+    menu.selectPage(null, null);
+    $location.path( '/' );
+  }
+
+  function openPage() {
+    $scope.closeMenu();
+
+    if (self.autoFocusContent) {
+      focusMainContent();
+      self.autoFocusContent = false;
+    }
+  }
+
+  function focusMainContent($event) {
+    // prevent skip link from redirecting
+    if ($event) { $event.preventDefault(); }
+
+    $timeout(function(){
+      mainContentArea.focus();
+    },90);
+
+  }
+
+  function isSelected(page) {
+    return menu.isPageSelected(page);
+  }
+
+  function isSectionSelected(section) {
+    var selected = false;
+    var openedSection = menu.openedSection;
+    if(openedSection === section){
+      selected = true;
+    }
+    else if(section.children) {
+      section.children.forEach(function(childSection) {
+        if(childSection === openedSection){
+          selected = true;
+        }
+      });
+    }
+    return selected;
+  }
+
+  function isOpen(section) {
+    return menu.isSectionSelected(section);
+  }
+
+  function toggleOpen(section) {
+    menu.toggleSelectSection(section);
+  }
 
   // TOGGLE MAIN NAV (TOP) ON MOBILE
   $scope.toggleDocsMenu = function(event) {

@@ -294,7 +294,7 @@ p.
       Rather than modifying the packaged startup.sh, we are going to create our own. There are two types of applications on the VA Technology Stack:
     
     ul
-      li Provider Facing applications - Used by VA Personnel (i.e. Clerks, Physicians, Nurses, etc.)
+      li Provider Facing applications - Used by VA Personnel (i.e. Physicians, Nurses, Clerks etc.)
       li Veteran Facing applications - Used by Veterans
       
     p.
@@ -378,17 +378,53 @@ p.
 .l-main-section
 
   h2#section-angular-create-account 6. Install VA Dependencies
-
+  
   p.
-    VA Dependency Links Coming Soon!
+    Below are the VA Resources needed: Authorization Services and SSOE Proxy for user authentication and Mobile Health Platform Web 
+    (formely known as Health Adapter)
+  .l-sub-section
+    h4 Authorization Services
+    p.
+      Download the WAR file here:
+      <a href="/download/AuthorizationServices.war">AuthorizationServices.war</a>.
+      After downloading, copy this file into the Tomcat webapps directory:
+      
+    pre.prettyprint
+      code.
+        cd ~/Downloads #cd to whatever directory you downloaded the WAR file to
+        mv AuthorizationServices.war $CATALINA_HOME/webapps
+      
+
+    h4 SSOE Proxy
+    p.
+      Download the WAR file here:
+      <a href="/download/ssoeproxy.war">ssoeproxy.war</a>.
+      After downloading, copy this file into the Tomcat webapps directory:
+      
+    pre.prettyprint
+      code.
+        cd ~/Downloads #cd to whatever directory you downloaded the WAR file to
+        mv ssoeproxy.war $CATALINA_HOME/webapps
+
+    h4 Mobile Health Platform Web (Health Adapter)
+    p.
+      Download the WAR file here:
+      <a href="/download/MobileHealthPlatformWeb.war">MobileHealthPlatformWeb.war</a>.
+      After downloading, copy this file into the Tomcat webapps directory:
+      
+    pre.prettyprint
+      code.
+        cd ~/Downloads #cd to whatever directory you downloaded the WAR file to
+        mv MobileHealthPlatformWeb.war $CATALINA_HOME/webapps
+      
 
 // STEP 7 - Verify Tomcat Manager ##########################
-.l-main-section
+//.l-main-section
 
-  h2#section-load-component-module 7. Verify via Tomcat Manager
+//  h2#section-load-component-module 7. Verify via Tomcat Manager
 
-  p.
-    Verification via Tomcat Manager Coming Soon
+//  p.
+//    Verification via Tomcat Manager Coming Soon
 
 
 // WHAT'S NEXT... ##########################

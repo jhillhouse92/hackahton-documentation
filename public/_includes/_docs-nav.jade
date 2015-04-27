@@ -1,14 +1,18 @@
-nav.side-nav.l-pinned-left.l-layer-4.l-offset-nav
+md-sidenav(class="site-sidenav md-sidenav-left md-whiteframe-z2 l-pinned-left l-layer-4 l-offset-nav" md-component-id="left" md-is-locked-open="$mdMedia('gt-sm')")
   header.side-nav-search.st-input-wrapper
     form.st-input-inner
       label(for="search-io" class="is-hidden") Search Docs
       input(type="search" id="search-io" placeholder="SEARCH DOCS...")
-    button(class="mobile-trigger button" aria-label="View Docs Menu" ng-click="toggleDocsMenu($event)" md-button) Docs <span class="icon icon-arrow-drop-down"></span>
+    md-content(flex role="navigation")
+      ul.docs-menu
+        li(ng-repeat="section in menu.sections" class="parent-list-item" ng-class="{'parentActive' : isSectionSelected(section)}")
+          h2(class="menu-heading" ng-if="section.type === 'heading'" id="heading_{{ section.name | nospace }}")
+            {{section.name}}
+          
+          menu-link(section="section" ng-if="section.type === 'link'")
 
-  ul(class="side-nav-primary" ng-class="showDocsNav ? 'is-visible' : ''")
-    if current.path[2]
-      for page, slug in public.docs[current.path[1]][current.path[2]]._data
-        name = page.menuTitle || page.title
-        selected =  current.path[3] == slug ? 'is-selected':''
+          menu-toggle(section="section" ng-if="section.type === 'toggle'")
 
-        li <a class="#{selected}" href="/docs/#{current.path[1]}/#{current.path[2]}/#{slug}.html" md-button><span class="side-nav-icon icon-#{page.icon}"></span> #{name}</a>
+          ul(ng-if="section.children" class="menu-nested-list")
+            li(ng-repeat="child in section.children" ng-class="{'childActive' : isSectionSelected(child)}")
+              menu-toggle(section="child")
