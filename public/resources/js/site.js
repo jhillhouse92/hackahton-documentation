@@ -3,13 +3,24 @@
 *
 */
 
-var angularIO = angular.module('angularIOApp', ['ngMaterial'])
+var angularIO = angular.module('angularIOApp', ['ngMaterial', 'ngRoute'])
 
 //app Configuration routing
 .config([
+  '$routeProvider',
   '$mdThemingProvider',
-function($mdThemingProvider) {
-  
+function($routeProvider, $mdThemingProvider) {
+  $routeProvider
+    .when('/', {
+        templateUrl: '/docs/js/latest/home.html'
+    }).
+    when('/local-environment-guide.html', {
+        templateUrl: '/docs/js/latest/local-environment-guide.html'
+    }).
+    when('/va-moms-description.html', {
+        templateUrl: '/docs/js/latest/va-moms-description.html'
+    });
+    
   $mdThemingProvider.theme('default')
     .primaryPalette('blue', {
       'default': '700', // by default use shade 400 from the pink palette for primary intentions
@@ -35,9 +46,15 @@ angularIO.factory('menu', [
   '$rootScope',
 function($location, $rootScope) {
 
-  var sections = [{
+  var sections = [
+  {
     name: 'Getting Started',
-    url: '/getting-started',
+    url: '/',
+    type: 'link'  
+  },
+  {
+    name: 'Local Environment Guide',
+    url: '/local-environment-guide.html',
     type: 'link'
   }];
 
@@ -49,8 +66,43 @@ function($location, $rootScope) {
       name: 'VA Moms',
       type: 'toggle',
       pages: [{
-        name: 'Description and Installation',
-        url: '/docs/js/latest/va-moms-description.html',
+        name: 'Guide',
+        url: '/va-moms-description.html',
+        type: 'link'
+      },
+      {
+        name: '1. Description and Installation',
+        url: '/va-moms-description.html',
+        type: 'link'
+      },
+      {
+        name: '2. Understanding Data',
+        url: '/va-moms-description.html',
+        type: 'link'
+      },
+      {
+        name: '3. Saving Data',
+        url: '/va-moms-description.html',
+        type: 'link'
+      },
+      {
+        name: '4. Retrieving Data',
+        url: '/va-moms-description.html',
+        type: 'link'
+      },
+      {
+        name: '5. Structuring Data',
+        url: '/va-moms-description.html',
+        type: 'link'
+      },
+      {
+        name: '6. Understanding Security',
+        url: '/va-moms-description.html',
+        type: 'link'
+      },
+      {
+        name: '7. App Deployment',
+        url: '/va-moms-description.html',
         type: 'link'
       },
       {
@@ -187,12 +239,6 @@ function($location, $rootScope) {
       $scope.isSelected = function() {
         return controller.isSelected($scope.section);
       };
-
-      $scope.focusSection = function() {
-        // set flag to be used later when
-        // $locationChangeSuccess calls openPage()
-        controller.autoFocusContent = true;
-      };
     }
   };
 })
@@ -239,6 +285,15 @@ function($location, $rootScope) {
   };
 });
 
+
+angularIO.directive('prettify', function() {
+    return {
+        restrict: 'E',
+        link: function postLink(scope, element, attrs) {
+              prettyPrint();
+        }
+    };
+});
 /*
 * Apllication Controller
 *
@@ -258,13 +313,11 @@ angularIO.controller('AppCtrl', ['$scope', '$mdDialog', '$mdMedia', 'menu', '$lo
   $scope.isSectionSelected = isSectionSelected;
 
   $rootScope.$on('$locationChangeSuccess', openPage);
-  $scope.focusMainContent = focusMainContent;
 
   // Methods used by menuLink and menuToggle directives
   this.isOpen = isOpen;
   this.isSelected = isSelected;
   this.toggleOpen = toggleOpen;
-  this.autoFocusContent = false;
 
 
   var mainContentArea = document.querySelector("[role='main']");
@@ -292,21 +345,6 @@ angularIO.controller('AppCtrl', ['$scope', '$mdDialog', '$mdMedia', 'menu', '$lo
 
   function openPage() {
     $scope.closeMenu();
-
-    if (self.autoFocusContent) {
-      focusMainContent();
-      self.autoFocusContent = false;
-    }
-  }
-
-  function focusMainContent($event) {
-    // prevent skip link from redirecting
-    if ($event) { $event.preventDefault(); }
-
-    $timeout(function(){
-      mainContentArea.focus();
-    },90);
-
   }
 
   function isSelected(page) {

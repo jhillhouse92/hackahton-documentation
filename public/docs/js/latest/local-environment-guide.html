@@ -1,0 +1,270 @@
+<p><strong>Angular is still unpackaged and in alpha</strong>. This quickstart does not
+reflect the final build process for Angular. The following setup is for those who
+want to try out Angular while it is in alpha.
+</p><!-- STEP 1 - Download Java, Tomcat, and Gradle ##########################--><div class="l-main-section"><h2 id="section-create-project">1. Download Java, Tomcat, and Gradle</h2><p>The goal of this guide is to set up your local environment to run the example applications and begin creating your own applications.
+To get started, download the following dependencies.
+</p><div class="l-sub-section"><h4>Java SDK 1.8</h4><p>Java can be downloaded from the
+<a href="http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html">Oracle website</a>.
+The direct link for the Mac OS X Binary is <a href="http://download.oracle.com/otn-pub/java/jdk/8u40-b27/jdk-8u40-macosx-x64.dmg">here</a>.
+Go ahead and install Java by running the binary installer. We will set up Tomcat and Gradle in the next step.
+</p><h4>Tomcat 8</h4><p>Tomcat is a Java Servlet Container that we will use as our web server.
+Tomcat 8 can be downloaded from the <a href="https://tomcat.apache.org/download-80.cgi">Apache Tomcat website</a>.
+</p><h4>Gradle 1.12</h4><p>Gradle is a project automation technology that builds upon the concepts of Apache Ant and Apache Maven.
+You can download Gradle from <a href="#https://gradle.org/downloads/">here</a>. The direct binary distribution is
+<a href="https://services.gradle.org/distributions/gradle-1.12-bin.zip">here</a>.
+</p><div class="alert is-helpful">Note: <strong>Gradle 2.3</strong> is the current latest release. You must click the dropdown under previous releases and choose <strong>Gradle 1.12</strong>
+as the VA has not approved Gradle 2.0+ currently. The documentation assumes you have downloaded the Binary only distribution.
+</div></div></div><!-- STEP 2 - Setting up Environment Variables ##########################--><div class="l-main-section"><h2 id="section-add-es6-shim">2. Setting up Environment Variables</h2><p>We are going to create a development folder for Tomcat and Gradle:</p><pre class="prettyprint"><code>cd ~
+mkdir development-env
+cd Downloads # (change directory to where you downloaded Tomcat and Gradle)
+unzip apache-tomcat-8.0.21.zip
+mv apache-tomcat-8.0.21 ~/development-env/
+unzip gradle-1.12-bin.zip
+mv gradle-1.12 ~/development-env/
+</code></pre><p>Now we are going to set some Environment Variables.
+</p><pre class="prettyprint"><code>cd ~
+vi .bash_profile # user your favorite text editor, if using vi and using Command+C and Command+V, press i to insert first
+## Java SDK
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_40.jdk/Contents/Home
+
+## Catalina (Tomcat)
+export CATALINA_HOME=~/development-env/apache-tomcat-8.0.21
+export CATALINA_OPTS='-XX:MaxPermSize=512m - Xmx2048m'
+export PATH=$PATH:$CATALINA_HOME
+
+## Gradle
+export GRADLE_HOME=~/development-env/gradle-1.12
+export GRADLE_OPTS='-XX:MaxPermSize=512m -Xmx2048m'
+export PATH=$PATH:$GRADLE_HOME/bin
+
+#Press :wq to save the file, if using vi
+source ~/.bash_profile # loads the environment variables
+java -version # should output the java version
+
+java version "1.8.0_40"
+Java(TM) SE Runtime Environment (build 1.8.0_40-b27)
+Java HotSpot(TM) 64-Bit Server VM (build 25.40-b25, mixed mode)
+
+gradle -v # should output the Gradle version
+
+Java HotSpot(TM) 64-Bit Server VM warning: ignoring option MaxPermSize=512m; support was removed in 8.0
+
+------------------------------------------------------------
+Gradle 1.12
+------------------------------------------------------------
+
+Build time:   2014-04-29 09:24:31 UTC
+Build number: none
+Revision:     a831fa866d46cbee94e61a09af15f9dd95987421
+
+Groovy:       1.8.6
+Ant:          Apache Ant(TM) version 1.9.3 compiled on December 23 2013
+Ivy:          2.2.0
+JVM:          1.8.0_40 (Oracle Corporation 25.40-b25)
+OS:           Mac OS X 10.9.4 x86_64
+
+cat $CATALINA_HOME #should output the tomcat root folder
+
+cat: /Users/YOUR-USER-NAME/development-env/apache-tomcat-8.0.21: Is a directory
+</code></pre></div><!-- STEP 3 - Install and Configure MySQL ##########################--><div class="l-main-section"><h2 id="section-transpile">3. Install and Configure MySQL 5.5</h2><p>Download MySQL from the MySQL website. The direct link is <a href="https://dev.mysql.com/get/Downloads/MySQL-5.5/mysql-5.5.42-osx10.9-x86_64.dmg">
+Here</a>
+</p><div class="alert is-helpful">Note: <strong>MySQL 5.6.15</strong> is the most recent version <a href="http://www.va.gov/TRM/ToolPage.asp?tid=6209#">approved by the VA</a>.
+However, MySQL 5.6.15 is not available for Mac OS X 10.9. Consequently, this documentation recommends MySQL 5.5.42.
+
+p.
+Now we are going to add MySQL to the .bash_profile.
+</div><pre class="prettyprint linenums"><code>cd ~
+vi .bash_profile #add the following lines to the end of the file (if using Command+C and Command+V and Vi make sure to press i to insert)
+
+## MySQL
+alias  mysql='/usr/local/mysql/bin/mysql'
+
+#Press :wq if using Vi to save
+
+source .bash_profile
+alias mysql #to make sure the change took effect
+alias mysql='/usr/local/mysql/bin/mysql' # should output
+</code></pre><div class="alert is-helpful">In order for the applications to start we need to create three databases: <strong>HADB</strong>, <strong>AUTHDB</strong>, and
+<strong>METRIC_AUDIT</strong>. These will be utilized by the Authorization Services and Mobile Health Platform Web applications (VA Dependencies).
+In addition, all applications need to implement the Metric API populating METRIC_AUDIT.
+</div><p>We have a few more MySQL commands to run:</p><pre class="prettyprint"><code>cd /usr/local/mysql
+sudo /usr/local/mysql/scripts/mysql_install_db —user=root # you should get the following message
+
+Installing MySQL system tables...
+OK
+Filling help tables...
+OK
+
+To start mysqld at boot time you have to copy support-files/mysql.server to the right place for your system
+
+PLEASE REMEMBER TO SET A PASSWORD FOR THE MySQL root USER !
+To do so, start the server, then issue the following commands:
+
+./bin/mysqladmin -u root password 'new-password'
+./bin/mysqladmin -u root -h LV-JHILLHOUSE.local password 'new-password'
+
+Alternatively you can run:
+./bin/mysql_secure_installation
+
+which will also give you the option of removing the test
+databases and anonymous user created by default.  This is
+strongly recommended for production servers.
+
+See the manual for more instructions.
+
+You can start the MySQL daemon with:
+cd . ; ./bin/mysqld_safe &
+
+You can test the MySQL daemon with mysql-test-run.pl
+cd ./mysql-test ; perl mysql-test-run.pl
+
+Please report any problems at http://bugs.mysql.com/
+
+#Run this command next and press Enter again to get back to terminal and send the process to the background
+sudo /usr/local/mysql/bin/mysqld_safe —user=root —max_allowed_packet=100M &
+
+#Set up a password for root
+sudo ./bin/mysqladmin -u root password 'YourPassword'
+
+#Test MySQL Connection. It will prompt for password and enter 'YourPassword'
+mysql -u root -p
+
+#Create the needed databases
+CREATE DATABASE HADB;
+CREATE DATABASE AUTHDB;
+CREATE DATABASE METRIC_AUDIT;
+</code></pre><p>Now that our MySQL Installation is ready. We need to do more Tomcat Configuration.
+</p></div><!-- STEP 4 - Configure Tomcat ##########################--><div class="l-main-section"><h2 id="section-angular-create-account">4. Configure Tomcat</h2><p>Once Tomcat has been placed we’ll need to make sure that it is has the permissions necessary for the applications to run.
+The applications need quite a lot of permission. We’ll also need to configure Tomcat’s <code>conf/tomcat-users.xml</code> and
+<code>conf/context.xml</code>.
+</p><p>To configure permissions on the tomcat folder, enter a command to open up permissions on the entire Tomcat folder. An example shown below:
+</p><div class="alert is-helpful"><strong>Note:</strong> If the appropriate permissions are not granted, you might run into a <strong>HTTP 500 Error</strong> on the server when accessing SSOeproxy
+(a VA dependency).
+
+</div><pre class="prettyprint linenums"><code>cd ~/development-env/
+chmod -R 777 apache-tomcat-8.0.21/
+</code></pre><div class="l-sub-section"><h3>conf/context.xml configuration</h3><p>We need to configure the Tomcat’s context configuration in <code>conf/context.xml</code> as well:
+</p><pre class="prettyprint"><code>cd $CATALINA_HOME/conf
+vi context.xml
+</code></pre><p>The 4 resources below need to be added. After adding them, save with <code>:wq</code>. Remember, if using Command+C and Command+V and Vi
+make sure to press <code>i</code> to insert before pasting the lines into the file.
+</p><pre class="prettyprint linenums"><code>&lt;Context&gt;
+
+  &lt;!-- Default set of monitored resources --&gt;
+  &lt;WatchedResource>WEB-INF/web.xml&lt;/WatchedResource&gt;
+
+  &lt;!-- Uncomment this to disable session persistence across Tomcat restarts --&gt;
+  &lt;!--
+  &lt;Manager pathname="" /&gt;
+  --&gt;
+
+  &lt;!-- Uncomment this to enable Comet connection tacking (provides events
+       on session expiration as well as webapp lifecycle) -->
+  &lt;!--
+  &lt;Valve className="org.apache.catalina.valves.CometConnectionManagerValve" />
+  -->
+  &lt;Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxActive="100" maxIdle="30"
+      maxWait="10000" name="jdbc/HADB" password="YourMySQLPassword" type="javax.sql.DataSource"
+      url="jdbc:mysql://localhost:3306/HADB" username="root" validationQuery="SELECT 1"/>
+  &lt;Resource auth="Container" driverClassName="com.mysql.jdbc.Driver" maxActive="100" maxIdle="30"
+      maxWait="10000" name="jdbc/AUTHDB" password="YourMySQLPassword" type="javax.sql.DataSource"
+      url="jdbc:mysql://localhost:3306/AUTHDB" username="root" validationQuery="SELECT 1"/>
+  &lt;Resource auth="Container" driverClassName="net.sourceforge.jtds.jdbc.Driver" maxActive="100" maxIdle="30"
+      maxWait="10000" name="jdbc/OIA_MobileHealth" password="NOTE*" type="javax.sql.DataSource"
+      url="jdbc:jtds:sqlserver://23.96.16.159:1433;databaseName=CDWWORK;useNTLMv2=true;Workgroup=WORKGROUP"
+      username="OIA_ClinicInHand_APP" validationQuery="SELECT 1"/>
+  &lt;Resource name="jdbc/METRIC_AUDIT" auth="Container" type="javax.sql.DataSource" maxActive="100" maxIdle="30"
+      maxWait="10000" validationQuery="SELECT 1" username="root" password="YourMySQLPassword"
+      driverClassName="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/METRIC_AUDIT"/>
+
+&lt;/Context>
+</code></pre><div class="alert is-helpful"><strong>IMPORTANT:</strong> For <strong>OIA_MobileHealth</strong>, the 3rd Resource in the file. The password is marked as <strong>NOTE*</strong>.
+For security reasons, please contact Hack DC officials for credentials.
+</div></div><div class="l-sub-section"><h3>conf/tomcat-users.xml configuration</h3><p>Now, we need to set up the admin user to access Tomcat Manager in <code>conf/tomcat-users.xml</code>:
+</p><div class="alert is-helpful">Note: You should already be in the <code>$CATALINA_HOME/conf</code> directory to complete the following instructions.
+Also, the username cannot be admin as that username has been locked.
+</div><pre class="prettyprint linenums"><code>vi tomcat-users.xml
+
+#Add the following lines outside of the commented area
+&lt;role rolename="manager-gui"/>
+&lt;user password="YourAdminPassword" roles="manager-gui" username="AdminUsername"/>
+</code></pre></div><div class="l-sub-section"><h3>bin/startup.sh configuration</h3><p>We have one final change to make to complete tomcat configuration which is to update the start-up script.
+Rather than modifying the packaged startup.sh, we are going to create our own. There are two types of applications on the VA Technology Stack:
+</p><ul><li>Provider Facing applications - Used by VA Personnel (i.e. Physicians, Nurses, Clerks etc.)</li><li>Veteran Facing applications - Used by Veterans</li></ul><p>We are first going to create a Tomcat startup script with the options necessary for a Provider Facing application.
+</p><pre class="prettyprint"><code>cd $CATALINA_HOME/bin
+vi tomcat-provider-startup.sh
+</code></pre><p>Include the following in the file.
+</p><pre class="prettyprint linenums"><code>#!/bin/sh
+cp lib/jtds-1.2.8.jar $CATALINA_HOME/lib/.
+export CATALINA_OPTS="-Xmx1024m -XX:MaxPermSize=512m -Dorg.apache.cocoon.mode=va-provider-prod
+-Dorg.apache.commons.logging.LogFactory=org.apache.commons.logging.impl.LogFactoryImpl
+-Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true
+-Dpool.endPointUrl=http://23.20.91.225/mdwstest/EmrSvc.asmx
+-Dmdws.EmrSvcEndPointBaseUrl=http://23.20.91.225/mdwstest
+-Dmdws.EmrSvcEndPointUrl=EmrSvc.asmx
+-Dscheduling.endPointUrl=/SchedulingSvc.asmx
+-Dtools.endPointUrl=/ToolsService.asmx
+-Dquery.endPointUrl=/querysvc.asmx
+-Dmdws.endPointUrl=/EmrSvc.asmx
+-Dcdw_user=cdwadmin -Dcdw_password=<ASK ADMIN> -Dcdw_driver=net.sourceforge.jtds.jdbcx.JtdsDataSource -Dcdw_url=jdbc:jtds:sqlserver://23.96.16.159:1433;databaseName=OIA_MobileHealth;useNTLMv2=true;Workgroup=WORKGROUP
+-Dbeanstalk.host=23.23.197.142 -Dbeanstalk.port=11300 -Dbeanstalk.enabled=true
+-Dsmtp.host=23.96.25.108
+-Dlvencountersvc.mdws.encounter.endPointBaseUrl=http://23.20.91.225/mdwstest/ -Dlvencountersvc.mdws.encounter.endPointUrl=/LVEncounterSvc.asmx
+-Demrsvc.mdws.encounter.endPointBaseUrl=http://23.20.91.225/mdwstest/ -Demrsvc.mdws.encounter.endPointUrl=/EmrSvc.asmx
+-Dlvordermgmtsvc.mdws.encounter.endPointBaseUrl=http://23.20.91.225/mdwstest/ -Dlvordermgmtsvc.mdws.encounter.endPointUrl=/LVOrderMgmtSvc.asmx
+-Dmvi.endPointUrl=http://ec2-54-211-31-142.compute-1.amazonaws.com:8080/mvi/mockVAIdMPort
+-DvistaFacilities=999,9999,506,508,509,523,526,539,541,540,542,757,558,557,573,528,637,503,512,544,553,562,585,596,688,529,538,552,561,620,595,613,652,672,402,603,546,621,630,646,655,689,405,460,519,521,515,516,517,518,534,565,581,583,631,632,650,548,568,619,537,437,564,578,580,589,614,590,608,610,642,659,658,673,693,674,607,623,556,656,549,550,598,618,635,667,501,531,649,666,502,504,520,756,586,695,629,636,438,679,554,436,657,676,626,442,575,660,593,459,640,691,671,644,678,605,612,653,664,662,687,692,675,740,600,648,668,570,463,663,654,777,111,222,333"
+echo tomcat shutdown
+$CATALINA_HOME/bin/shutdown.sh
+sleep 5
+echo tomcat startup
+$CATALINA_HOME/bin/catalina.sh jpda start
+
+</code></pre></div></div><!-- STEP 5 - Install Mongo ##########################--><div class="l-main-section"><h2 id="section-transpile">5. Install Mongo</h2><p>Download MongoDB 3.0.1 from the MongoDB website. The direct link is <a href="http://www.mongodb.org/downloads">
+Here</a>
+</p><p>Now we are going to add MongoDB to the .bash_profile.
+</p><pre class="prettyprint linenums"><code>cd ~
+vi .bash_profile #add the following lines to the end of the file (if using Command+C and Command+V and Vi make sure to press i to insert)
+
+## Mongo
+alias mongo='/usr/local/mongodb/bin'
+
+#Press :wq if using Vi to save
+
+source .bash_profile
+alias mongo #to make sure the change took effect
+alias mongo='/usr/local/mongodb/bin' # should output
+
+cd /usr/local/mongodb/bin
+mongo # should connect to the db
+
+MongoDB shell version: 3.0.1
+connecting to: test
+Server has startup warnings:
+2015-03-20T15:01:56.898-0400 [initandlisten]
+2015-03-20T15:01:56.898-0400 [initandlisten] ** WARNING: soft rlimits too low.
+Number of files is 256, should be at least 1000
+> # Successfully connected.
+
+</code></pre></div><!-- STEP 6 - Install VA Dependencies ##########################--><div class="l-main-section"><h2 id="section-angular-create-account">6. Install VA Dependencies</h2><p>Below are the VA Resources needed: Authorization Services and SSOE Proxy for user authentication and Mobile Health Platform Web
+(formely known as Health Adapter)</p><div class="l-sub-section"><h4>Authorization Services</h4><p>Download the WAR file here:
+<a href="/download/AuthorizationServices.war">AuthorizationServices.war</a>.
+After downloading, copy this file into the Tomcat webapps directory:
+</p><pre class="prettyprint"><code>cd ~/Downloads #cd to whatever directory you downloaded the WAR file to
+mv AuthorizationServices.war $CATALINA_HOME/webapps
+
+</code></pre><h4>SSOE Proxy</h4><p>Download the WAR file here:
+<a href="/download/ssoeproxy.war">ssoeproxy.war</a>.
+After downloading, copy this file into the Tomcat webapps directory:
+</p><pre class="prettyprint"><code>cd ~/Downloads #cd to whatever directory you downloaded the WAR file to
+mv ssoeproxy.war $CATALINA_HOME/webapps
+</code></pre><h4>Mobile Health Platform Web (Health Adapter)</h4><p>Download the WAR file here:
+<a href="/download/MobileHealthPlatformWeb.war">MobileHealthPlatformWeb.war</a>.
+After downloading, copy this file into the Tomcat webapps directory:
+</p><pre class="prettyprint"><code>cd ~/Downloads #cd to whatever directory you downloaded the WAR file to
+mv MobileHealthPlatformWeb.war $CATALINA_HOME/webapps
+
+</code></pre></div></div><!-- STEP 7 - Verify Tomcat Manager ##########################--><!--.l-main-section--><!--  h2#section-load-component-module 7. Verify via Tomcat Manager--><!--  p.--><!--    Verification via Tomcat Manager Coming Soon-->
+<!-- WHAT'S NEXT... ##########################--><div class="l-main-section"><h2 id="section-transpile">Congratulations, you've made it!</h2><p>You are ready to install the example applications.</p></div>
+
+<prettify></prettify>

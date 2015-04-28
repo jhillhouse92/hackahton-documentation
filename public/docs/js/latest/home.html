@@ -1,0 +1,106 @@
+<div class="c4">
+  <md-card class="card">
+    <md-card-content>
+      <h3 class="text-headline text-uppercase"><span class="icon-query-builder"></span> Local Environment</h3>
+      <p class="text-body">Get started in 30 minutes</p>
+      <footer><a href="/docs/#quickstart.html" md-button="md-button" class="button">View Environment Guide</a></footer>
+    </md-card-content>
+  </md-card>
+</div>
+<div class="c4">
+  <md-card class="card">
+    <md-card-content>
+      <h3 class="text-headline text-uppercase"><span class="icon-play-circle-outline"></span> Resources</h3>
+      <p class="text-body">Additional Resources</p>
+      <footer><a href="/docs/#resources.html" md-button="md-button" class="button button-primary">View Resources</a></footer>
+    </md-card-content>
+  </md-card>
+</div>
+<div class="c4">
+  <md-card class="card">
+    <md-card-content>
+      <h3 class="text-headline text-uppercase"><span class="icon-book"></span> API Guide</h3>
+      <p class="text-body">MDWS/VistA and Mongo API</p>
+      <footer><a href="/docs/#api.html" md-button="md-button" class="button">View API</a></footer>
+    </md-card-content>
+  </md-card>
+</div>
+<div class="clear"></div>
+<!-- Architecture Overview ##########################-->
+<h2 id="section-create-project">Architecture Overview</h2>
+<p>
+  The <strong>VA Application Architecture</strong> involves 3 components:
+  
+</p>
+<ol>
+  <li>The Application - HTML/JS web application (front-end code)</li>
+  <li>The Middle Tier - Note: If using MDWS (pronounced Meadows), a SOAP client will be needed to interface between the Application and MDWS.</li>
+  <li>The Database
+    <ul>
+      <li>VistA - A database of one hospital facility</li>
+      <li>CDW - A collection of all VistA instances across multiple hospital facilities</li>
+      <li>MongoDB - Application database used for individual application needs</li>
+    </ul>
+  </li>
+</ol>
+<p>
+  The following depicts an overview of the architecture.
+  
+</p>
+<div class="l-sub-section diagram green">
+  <h4>Front End</h4>
+  <p>
+    Each team gets a pair of Apache servers
+    
+  </p>
+  <div layout="row">
+    <div flex="flex"><span>Apache (Veteran)</span></div>
+    <div flex="flex"><span>Node.js (for WebRTC)</span></div>
+    <div flex="flex" offset="20"><span>Apache (Clinician)</span></div>
+    <div flex="flex"><span>Node.js (for WebRTC)</span></div>
+  </div>
+  <div layout="row" class="margin-top-20">
+    <div flex="flex"><span>
+        Application resources
+        </span></div>
+  </div>
+</div>
+<div class="l-sub-section diagram spacing yellow">
+  <h4>Middle Tier</h4>
+  <div layout="row">
+    <div flex="flex" class="padding-double">MDWS <br /><a href="#">Info</a></div>
+    <div flex="flex" class="padding-double">Cloverleaf <br /><a href="#">Info</a></div>
+    <div flex="flex">JAVA API (Sumitro's VistA interface)</div>
+    <div flex="flex" class="padding-double">Node.js <br /><a href="#">EWD.js</a></div>
+    <div flex="flex" class="padding-double">Red Hat PaaS <br /><a href="#">OpenShift</a></div>
+    <div flex="flex" class="padding-double">XMPP <br /><a href="#">Ignite Openfire</a></div>
+  </div>
+  <div layout="row" class="margin-top-20">
+    <div flex="flex" class="padding-double">OpenStack IaaS <br /><a href="#">IBM</a></div>
+    <div flex="flex" class="padding-double">OpenStack IaaS <br /><a href="#">HP</a></div>
+    <div flex="flex" offset="20" class="padding-double">OpenStack IaaS <br /><a href="#">Red Hat</a></div>
+    <div flex="flex"><span>Third-party API</span></div>
+    <div flex="flex"><span>
+        Third-party API
+        </span></div>
+  </div>
+</div>
+<div layout="row">
+  <div flex="flex">
+    <div class="l-sub-section diagram purple">
+      <h4>Back End</h4>
+      <div layout="row">
+        <div flex="flex" class="padding-double">VistA <br />(Windows)</div>
+      </div>
+    </div>
+  </div>
+  <div flex="flex" offset="20">
+    <div class="l-sub-section diagram purple">
+      <h4>Azure Back End</h4>
+      <div layout="row">
+        <div flex="flex" class="padding-double">CDW <br />(Windows)</div>
+        <div flex="flex" class="padding-double">MongoDB <br />(Windows)</div>
+      </div>
+    </div>
+  </div>
+</div>
