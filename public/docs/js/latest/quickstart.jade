@@ -250,9 +250,8 @@ p.
                       maxWait="10000" name="jdbc/AUTHDB" password="YourMySQLPassword" type="javax.sql.DataSource"
                       url="jdbc:mysql://localhost:3306/AUTHDB" username="root" validationQuery="SELECT 1"/>
                   &lt;Resource auth="Container" driverClassName="net.sourceforge.jtds.jdbc.Driver" maxActive="100" maxIdle="30"
-                      maxWait="10000" name="jdbc/OIA_MobileHealth" password="NOTE*" type="javax.sql.DataSource"
-                      url="jdbc:jtds:sqlserver://23.96.16.159:1433;databaseName=CDWWORK;useNTLMv2=true;Workgroup=WORKGROUP"
-                      username="OIA_ClinicInHand_APP" validationQuery="SELECT 1"/>
+                      maxWait="10000" name="jdbc/OIA_MobileHealth" username="cdwadmin" password="cdwadmin12@#" type="javax.sql.DataSource" 
+                      url="jdbc:jtds:sqlserver://54.159.53.62;databaseName=OIA_MobileHealth;useNTLMv2=true;Workgroup=WORKGROUP" validationQuery="SELECT 1"/>
                   &lt;Resource name="jdbc/METRIC_AUDIT" auth="Container" type="javax.sql.DataSource" maxActive="100" maxIdle="30"
                       maxWait="10000" validationQuery="SELECT 1" username="root" password="YourMySQLPassword"
                       driverClassName="com.mysql.jdbc.Driver" url="jdbc:mysql://localhost:3306/METRIC_AUDIT"/>
@@ -310,19 +309,19 @@ p.
                 export CATALINA_OPTS="-Xmx1024m -XX:MaxPermSize=512m -Dorg.apache.cocoon.mode=va-provider-prod
                 -Dorg.apache.commons.logging.LogFactory=org.apache.commons.logging.impl.LogFactoryImpl
                 -Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true
-                -Dpool.endPointUrl=http://23.20.91.225/mdwstest/EmrSvc.asmx
-                -Dmdws.EmrSvcEndPointBaseUrl=http://23.20.91.225/mdwstest
+                -Dpool.endPointUrl=http://23.20.72.89/mdws3.1.9.2/EmrSvc.asmx
+                -Dmdws.EmrSvcEndPointBaseUrl=http://23.20.72.89/mdws3.1.9.2
                 -Dmdws.EmrSvcEndPointUrl=EmrSvc.asmx
                 -Dscheduling.endPointUrl=/SchedulingSvc.asmx
                 -Dtools.endPointUrl=/ToolsService.asmx
                 -Dquery.endPointUrl=/querysvc.asmx
                 -Dmdws.endPointUrl=/EmrSvc.asmx
-                -Dcdw_user=cdwadmin -Dcdw_password=<ASK ADMIN> -Dcdw_driver=net.sourceforge.jtds.jdbcx.JtdsDataSource -Dcdw_url=jdbc:jtds:sqlserver://23.96.16.159:1433;databaseName=OIA_MobileHealth;useNTLMv2=true;Workgroup=WORKGROUP
+                -Dcdw_user=cdwadmin -Dcdw_password=cdwadmin12@# -Dcdw_driver=net.sourceforge.jtds.jdbcx.JtdsDataSource -Dcdw_url=jdbc:jtds:sqlserver://54.159.53.62;databaseName=OIA_MobileHealth;useNTLMv2=true;Workgroup=WORKGROUP
                 -Dbeanstalk.host=23.23.197.142 -Dbeanstalk.port=11300 -Dbeanstalk.enabled=true
                 -Dsmtp.host=23.96.25.108
-                -Dlvencountersvc.mdws.encounter.endPointBaseUrl=http://23.20.91.225/mdwstest/ -Dlvencountersvc.mdws.encounter.endPointUrl=/LVEncounterSvc.asmx
-                -Demrsvc.mdws.encounter.endPointBaseUrl=http://23.20.91.225/mdwstest/ -Demrsvc.mdws.encounter.endPointUrl=/EmrSvc.asmx
-                -Dlvordermgmtsvc.mdws.encounter.endPointBaseUrl=http://23.20.91.225/mdwstest/ -Dlvordermgmtsvc.mdws.encounter.endPointUrl=/LVOrderMgmtSvc.asmx
+                -Dlvencountersvc.mdws.encounter.endPointBaseUrl=http://23.20.72.89/mdws3.1.9.2/ -Dlvencountersvc.mdws.encounter.endPointUrl=/LVEncounterSvc.asmx
+                -Demrsvc.mdws.encounter.endPointBaseUrl=http://23.20.72.89/mdws3.1.9.2/ -Demrsvc.mdws.encounter.endPointUrl=/EmrSvc.asmx
+                -Dordermgmtsvc.mdws.encounter.endPointBaseUrl=http://23.20.72.89/mdws3.1.9.2/ -Dordermgmtsvc.mdws.encounter.endPointUrl=/OrderMgmtSvc.asmx
                 -Dmvi.endPointUrl=http://ec2-54-211-31-142.compute-1.amazonaws.com:8080/mvi/mockVAIdMPort
                 -DvistaFacilities=999,9999,506,508,509,523,526,539,541,540,542,757,558,557,573,528,637,503,512,544,553,562,585,596,688,529,538,552,561,620,595,613,652,672,402,603,546,621,630,646,655,689,405,460,519,521,515,516,517,518,534,565,581,583,631,632,650,548,568,619,537,437,564,578,580,589,614,590,608,610,642,659,658,673,693,674,607,623,556,656,549,550,598,618,635,667,501,531,649,666,502,504,520,756,586,695,629,636,438,679,554,436,657,676,626,442,575,660,593,459,640,691,671,644,678,605,612,653,664,662,687,692,675,740,600,648,668,570,463,663,654,777,111,222,333"
                 echo tomcat shutdown
