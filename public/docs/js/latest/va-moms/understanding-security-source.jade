@@ -1,0 +1,170 @@
+.l-main-section
+    h2 Avoid Building Nests
+
+    p.
+        Because we can nest data up to 32 levels deep, it's tempting to think that this should be the default structure. However, when we fetch data for a node in Firebase, we also retrieve all of its child nodes. Therefore, in practice, it's best to keep things as flat as possible, just as one would structure SQL tables. Consider the following badly nested structure:
+
+    .alert.is-important.
+        When we read a data node in Firebase, we also retrieve all of its children!
+        
+    pre.prettyprint.linenums
+        code.
+              {
+                // a poorly nested data architecture, because
+                // iterating "rooms" to get a list of names requires
+                // potentially downloading hundreds of megabytes of messages
+                "rooms": {
+                  "one": {
+                    "name": "room alpha",
+                    "type": "private",
+                    "messages": {
+                      "m1": { "sender": "mchen", "message": "foo" },
+                      "m2": { ... },
+                      // a very long list of messages
+                    }
+                  }
+                }
+              }
+    p.
+        With this nested design, iterating the data becomes problematic. Even a simple operation like listing the names of rooms requires that the entire rooms tree, including all members and groups, be downloaded to the client.
+        
+.l-main-section
+    h2 Flatten Your Data
+
+    p.
+        If the data were instead split into separate paths (i.e. denormalized), it could be effeciently downloaded in segments, as it is needed. Consider this flattened architecture:
+    
+    pre.prettyprint.linenums
+        code.
+            {
+                // rooms contains only meta info about each room
+                // stored under the room's unique ID
+                "rooms": {
+                  "one": {
+                    "name": "room alpha",
+                    "type": "private"
+                  },
+                  "two": { ... },
+                  "three": { ... }
+                },
+            
+                // room members are easily accessible (or restricted)
+                // we also store these by room ID
+                "members": {
+                  // we'll talk about indices like this below
+                  "one": {
+                    "mchen": true,
+                    "hmadi": true
+                  },
+                  "two": { ... },
+                  "three": { ... }
+                },
+            
+                // messages are separate from data we may want to iterate quickly
+                // but still easily paginated and queried, and organized by room ID
+                "messages": {
+                  "one": {
+                    "m1": { "sender": "mchen", "message": "foo" },
+                    "m2": { ... },
+                    "m3": { ... }
+                  },
+                  "two": { ... },
+                  "three": { ... }
+                }
+              }
+      
+    p.
+        It's now possible to iterate the list of rooms by only downloading a few bytes per room, quickly fetching meta data for listing or displaying rooms in a UI. Messages can be fetched separately and displayed as they arrive, allowing the UI to stay responsive and fast.
+
+    .alert.is-helpful.
+        Read more on flat data structures in our blog.
+        
+.l-main-section
+    h2 Creating Data That Scales
+
+    p.
+        A lot of times in building apps, it's preferable to download a subset of a list. This is particularly common if the list contains thousands of records or more. When this relationship is static, and one-directional, we can simple nest the child objects under the parent:
+    
+    pre.prettyprint.linenums
+        code.
+            {
+                "users": {
+                  "john": {
+                     "todoList": {
+                        "rec1": "Walk the dog",
+                        "rec2": "Buy milk",
+                        "rec3": "Win a gold medal in the Olympics"
+                     }
+                  }
+                }
+            }
+            
+    p.
+        But often, this relationship is more dynamic, or it may be necessary to denormalize this data (John could have a more realistic todo list with a few thousand entries). This can often be solved by querying the list for a subset, as discussed in the earlier section on Retrieving Data.
+  
+    p.
+        But even this may be insufficient. Consider, for example, a two-way relationship between users and groups. Users can belong to a group and groups comprise a list of users. Since they cannot be nested both ways, a first attempt at this data structure would probably look this:
+    
+    pre.prettyprint.linenums
+        code.
+            // A first attempt at a two-way relationship
+            {
+                "users": {
+                    "mchen": { "name": "Mary Chen" },
+                    "brinchen": { "name": "Byambyn Rinchen" },
+                    "hmadi": { "name": "Hamadi Madi" }
+                },
+                "groups": {
+                "alpha": {
+                    "name": "Alpha Tango",
+                    "members": {
+                        "m1": "mchen",
+                        "m2": "brinchen",
+                        "m3": "hamadi"
+                    }
+                },
+                    "bravo": { ... },
+                    "charlie": { ... }
+                }
+            }
+
+    p.
+        Great start! But when it comes time to decide which groups a user belongs to, things get complicated. We can monitor all the groups and iterate them every time there is a change, but this is costly and slow. Even worse, what if Mary isn't allowed to see all of those groups? When we try to fetch the entire list we'll get an error telling us the operation wasn't allowed.
+    
+    p.
+        What we would like instead is an elegant way to list the groups Mary belongs to and fetch only data for those groups. An index of Mary's groups can help a great deal here:
+        
+    pre.prettyprint.linenums
+        code.
+              // An index to track Mary's memberships
+              {
+                "users": {
+                  "mchen": {
+                    "name": "Mary Chen",
+                    // index Mary's groups in her profile
+                    "groups": {
+                       // the value here doesn't matter, just that the key exists
+                       "alpha": true,
+                       "charlie": true
+                    }
+                  },
+                  ...
+                },
+                "groups": { ... }
+              }
+    
+    p.
+        Didn't we just duplicate some data by storing the relationship under both Mary's record and under the group? We now have mchen indexed under a group and alpha listed in Mary's profile. So in order to delete Mary from the group, it has to be updated in two places?                
+    
+    p.
+        Didn't we just duplicate some data by storing the relationship under both Mary's record and under the group? We now have mchen indexed under a group and alpha listed in Mary's profile. So in order to delete Mary from the group, it has to be updated in two places?
+        
+    div.callout.callout-info
+            header <i class="icon-jsfiddle-logo"></i> Try it on JSFiddle
+            p.
+                <a href="http://jsfiddle.net/firebase/6dzys/embedded/result,js/">Click here</a> to try it out in an interactive example, which demonstrates using an index to reference a master list of data.
+                
+    p.
+        Why do we invert the data by listing the ids as keys and setting the value to true? There are a few good reasons for this approach. It makes checking for a key very easy since we can just read /users/mchen/groups/$group_id and see if it is null.
+        
+            

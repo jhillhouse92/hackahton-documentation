@@ -1,0 +1,67 @@
+.l-main-section
+  h2 It's a JSON Tree
+
+  p.
+    All data is <b>stored as JSON objects</b>. There are no tables or records. When we add data to the JSON tree, it becomes a key in the existing JSON structure. For example, if we added a child widgets under users/mchen/, our data looks as follows:
+
+  pre.prettyprint.linenums
+        code.
+          {
+            "users": {
+              "mchen": {
+                "friends": { "brinchen": true },
+                "name": "Mary Chen",
+                // our child node appears in the existing JSON tree
+                "widgets": { "one": true, "three": true }
+              },
+              "brinchen": { ... },
+              "hmadi": { ... }
+            }
+          }
+
+.l-main-section
+  h2 Referencing a Firebase URL
+
+  p.
+    To read and write Firebase data through the REST API, we include a URL to our Firebase data store in the cURL request. This URL will be where all of our data is stored. In this example, we'll use the url https://docs-examples.firebaseio.com/rest/data. <br/><br/>
+    
+    Firebase also provides a Dashboard, which displays a visual representation of the data and provides tools for simple Administrative tasks. All the data in this guide is stored in the docs-examples Firebase; a read-only version of the Dashboard can be viewed by going to the Firebase URL in a browser.
+    <br/><br/>
+    
+    It's possible to directly access child nodes in the data as well. For example, to point to Mary Chen's name, simply append users/mchen/name to the URL:
+
+  pre.prettyprint.linenums
+        code.
+          {
+            "users": {
+              "mchen": {
+                "friends": { "brinchen": true },
+                "name": "Mary Chen",
+                // our child node appears in the existing JSON tree
+                "widgets": { "one": true, "three": true }
+              },
+              "brinchen": { ... },
+              "hmadi": { ... }
+            }
+          }
+
+.l-main-section
+  h2 Arrays in Firebase
+
+  p.
+    All data is <b>stored as JSON objects</b>. There are no tables or records. When we add data to the JSON tree, it becomes a key in the existing JSON structure. For example, if we added a child widgets under users/mchen/, our data looks as follows:
+
+  pre.prettyprint.linenums
+        code.
+          {
+            "users": {
+              "mchen": {
+                "friends": { "brinchen": true },
+                "name": "Mary Chen",
+                // our child node appears in the existing JSON tree
+                "widgets": { "one": true, "three": true }
+              },
+              "brinchen": { ... },
+              "hmadi": { ... }
+            }
+          }

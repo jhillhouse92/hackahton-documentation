@@ -254,3 +254,98 @@
 .margin-top-20 {
   margin-top: 20px;
 }
+
+
+
+/*** table ***/
+table thead th {
+  font-size:15px;
+  padding:10px;
+  text-align:center
+  }
+  
+table th,table td {
+  border:1px solid #dedfe9;
+  line-height:28px
+  }
+  
+table th {
+  font-family:proxima-nova,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+  font-weight:600;
+  font-style:normal;
+  background:-webkit-linear-gradient(top,#fff,#f2f3f7);
+  background:linear-gradient(to bottom,#fff,#f2f3f7);
+  padding:10px 20px;
+  color:#6f737a;
+  font-size:15px;
+  font-weight:700
+  }
+  
+  table th:first-child {
+    border-radius:3px 0 0 0
+  }
+  
+  table th:last-child {
+    border-radius:0 3px 0 0
+  }
+  
+  table td {
+    color:#63676c;
+    padding:15px;
+    font-size:15px
+  }
+  
+  table tr:nth-child(even) td {
+    background:#fbfcfd
+  }
+
+  table.method-table {
+    width:100%;margin:0
+  }
+
+  table code {
+    background:#e9eaf1;
+    padding:0 5px;
+    font-family:Monaco,"Lucida Console",monospace;
+    border-radius:3px
+  }
+  
+/*** aside **/
+.right {float:right}
+aside.tip{background:#f2f3f7;border-radius:3px;max-width:240px;padding:30px;margin:0 20px 20px 20px;box-sizing:border-box;color:#626c7a;line-height:24px;font-size:14px;position:relative;z-index:3}aside.tip h5{line-height:20px;margin-bottom:10px;font-size:14px;color:#626c7a}aside.right{margin-right:0}
+
+/*** callout **/
+.callout-warning {
+  border: 1px solid #fec324;
+  color: #7b8087;
+  background-color: rgba(254,195,36,.05);
+}
+.callout-info {
+  border: 1px solid #0f97f9;
+  color: #7b8087;
+  background-color: rgba(15,151,249,.05);
+}
+.callout-info header {
+  background: #0f97f9;
+  color: #fff;
+}
+.callout-warning header {
+  background: #fec324;
+  color: #fff;
+}
+.callout {
+  border-radius: 3px;
+  margin-bottom: 20px;
+}
+.callout header {
+  line-height: 20px;
+  font-size: 12px;
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.callout p {
+  padding: 20px;
+  margin: 0;
+  color: #6f737a;
+}

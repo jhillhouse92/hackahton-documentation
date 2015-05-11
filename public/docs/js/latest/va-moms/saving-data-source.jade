@@ -1,0 +1,97 @@
+.l-main-section
+  h2 Ways to Save Data
+
+  table
+    tr
+      th.
+        PUT
+      td.
+        Write or replace data to a <strong>defined path</strong>, like <code>messages/users/user1/&lt;data&gt;</code>
+    tr
+      th.
+        PATCH
+      td.
+        Update some of the keys for a defined path without replacing all of the data.
+    tr
+      th.
+        POST
+      td.
+        <strong>Add to a list of data</strong> in Firebase. Every time you send a <code>POST</code> request Firebase generates a unique ID, like <code>messages/users/&lt;unique-id&gt;/&lt;data&gt;</code>
+    tr
+      th.
+        DELETE
+      td.
+        Remove data from the specified Firebase reference.
+     
+
+  pre.prettyprint.linenums
+        code.
+          {
+            "users": {
+              "mchen": {
+                "friends": { "brinchen": true },
+                "name": "Mary Chen",
+                // our child node appears in the existing JSON tree
+                "widgets": { "one": true, "three": true }
+              },
+              "brinchen": { ... },
+              "hmadi": { ... }
+            }
+          }
+
+.l-main-section
+    h2 Writing Data with PUT
+
+    p.
+        The basic Firebase write operation through the REST API is PUT. To demonstrate saving data, we'll build a blogging application with posts and users. All of the data for our application will be stored at the Firebase URL https://docs-examples.firebaseio.com/rest/saving-data/fireblog.
+  
+    aside.tip.right.
+        If you are making REST calls from a browser that does not support some of the above methods, Firebase supports the <strong>X-HTTP-Method-Override</strong> header.
+    
+    p.
+        Let's start by saving some user data to Firebase. We'll store each user in Firebase by a unique username, and we'll also store their full name and date of birth. Since each user will have a unique username, it makes sense to use PUT here instead of POST since we already have the key and don't need to create one.
+ 
+    p.
+        Using PUT, we can write a string, number, boolean, array or any JSON object to Firebase. In this case we'll pass it an object:
+
+    div(class="clear")
+  
+    pre.prettyprint.linenums
+        code.
+          {
+            "users": {
+              "mchen": {
+                "friends": { "brinchen": true },
+                "name": "Mary Chen",
+                // our child node appears in the existing JSON tree
+                "widgets": { "one": true, "three": true }
+              },
+              "brinchen": { ... },
+              "hmadi": { ... }
+            }
+          }
+
+    .alert.is-important.
+        Using <b>PUT</b> will overwrite the data at the specified location, including any child nodes.
+    
+    
+.l-main-section
+  h2 Arrays in Firebase
+
+  p.
+    All data is <b>stored as JSON objects</b>. There are no tables or records. When we add data to the JSON tree, it becomes a key in the existing JSON structure. For example, if we added a child widgets under users/mchen/, our data looks as follows:
+
+  pre.prettyprint.linenums
+        code.
+          {
+            "users": {
+              "mchen": {
+                "friends": { "brinchen": true },
+                "name": "Mary Chen",
+                // our child node appears in the existing JSON tree
+                "widgets": { "one": true, "three": true }
+              },
+              "brinchen": { ... },
+              "hmadi": { ... }
+            }
+          }

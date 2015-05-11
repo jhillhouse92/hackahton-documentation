@@ -1,0 +1,86 @@
+.l-main-section
+  h2 Reading Data with GET
+
+  p.
+    We can read data from our Firebase by issuing a GET request to a Firebase endpoint. Let's continue with our blog example from the previous section and read all of our blog post data:     
+
+  pre.prettyprint.linenums
+        code.
+          {
+            "users": {
+              "mchen": {
+                "friends": { "brinchen": true },
+                "name": "Mary Chen",
+                // our child node appears in the existing JSON tree
+                "widgets": { "one": true, "three": true }
+              },
+              "brinchen": { ... },
+              "hmadi": { ... }
+            }
+          }
+
+.l-main-section
+    h2 Adding URI Parameters
+
+    p.
+        The REST API accepts the following parameters when reading data from Firebase. Listed below are the more commonly used parameters, for a full list refer to the REST API Reference.
+    
+    h4 auth
+  
+    p.
+        The auth request parameter allows access to data protected by Security and Firebase Rules, and is supported by all request types. The argument can either by your Firebase Secret or an authentication token, which we'll cover in the user authorization section. In the following example we send a GET request with an auth parameter, where CREDENTIAL is either your Firebase Secret or an authentication token:
+  
+    pre.prettyprint.linenums
+        code.
+            curl 'https://docs-examples.firebaseio.com/rest/saving-data/auth-example.json?auth=CREDENTIAL'
+    
+    .alert.is-helpful.
+        If you set a debug flag in the token, debug information can be found in X-Firebase-Auth-Debug header of the response.
+
+.l-main-section
+    h2 Querying Data
+
+    p.
+        With Firebase queries, we can selectively retrieve data based on various factors. To construct a query in Firebase, you start by specifying how you want your data to be ordered using the orderBy parameter. You can then combine this with five other parameters to conduct complex queries: limitToFirst, limitToLast, startAt, endAt, and equalTo.
+    
+    p.
+        Since all of us at Firebase think dinosaurs are pretty cool, we'll use this Firebase of dinosaur facts to demonstrate how you can query data in Firebase. Here's a snippet of the dinosaur data:
+  
+    pre.prettyprint.linenums
+        code.
+            {
+              "lambeosaurus": {
+                "height" : 2.1,
+                "length" : 12.5,
+                "weight": 5000
+              },
+              "stegosaurus": {
+                "height" : 4,
+                "length" : 9,
+                "weight" : 2500
+              }
+            }
+    
+    p.
+        We can order data in four ways: by child key, by key name, by value, or by priority. A basic Firebase query starts with one of these ordering parameters, each of which are explained below.
+        
+    .l-sub-section
+        h4 Ordering by a specified child key
+        
+        p.
+            We can order nodes by a common child key by passing that key to the orderBy parameter. For example, to read all dinosaurs ordered by height, we can do the following:
+            
+        pre.prettyprint.linenums
+            code.
+                curl 'https://docs-examples.firebaseio.com/rest/saving-data/auth-example.json?auth=CREDENTIAL'
+
+        p.
+            Any node which does not have the child key we're querying on will be sorted with a value of null, meaning it will come first in the ordering. For details on how data is ordered, see the How Data is Ordered section.
+            
+        p.
+            Queries can only order by one key at a time. Using the orderBy parameter multiple times on the same request throws an error.
+            
+        div.callout.callout-warning
+            header Add Indexing to your Security and Firebase Rules
+            p.
+                If you're using orderBy in your app, you need to define the keys you will be indexing on via the .indexOn rule in your Security and Firebase Rules. Read the documentation on the .indexOn rule for more information.
